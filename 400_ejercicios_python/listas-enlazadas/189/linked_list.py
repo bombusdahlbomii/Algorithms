@@ -15,34 +15,41 @@ class ListaEnlazada:
         self.head = None # EL inicio de la lista (Head)
         self.tail = None # puntero que indica el ultimo nodo
 
-    def reverse(self,data):
+    def add(self, data):
+        """Agrega un nodo al final en O(1) usando tail."""
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            self.tail = new_node
+            return
+        self.tail.next = new_node
+        self.tail = new_node
+
+    def reverse(self):
         """
         Objetivo: Invertir la lista en un solo recorrido O(n)
         """
         prev = None
         current = self.head
-
-        # Guardamos la antigua cabeza para que al final sea el tail 
-        old_head = self.head
+        self.tail = self.head # El head actual se convertira en el tail
 
         while current:
-            # 1. Guardar el siguiente nodo temporalmente
-            # 2. Invertir el puintero 'next' del acutual hacia 'prev'
-            # 3. Mover 'prev' al lugar 'current'
-            # 4. Mover 'current' al que guardaste en el paso 1
-            pass
-
-        # No olvidar acutlizar la cabeza y la cola al final
-        self.head = self.tail
-        self.tail = old_head
+            # 1. Guardar el siguiente nodo temporalmente                (guardar el futuro)
+            next_node = current.next
+            # 2. Invertir el puintero 'next' del acutual hacia 'prev'   (Invertir la flecha)
+            current.next = prev
+            # 3. Mover 'prev' al lugar 'current'                        (Avanzar el previo)
+            prev = current
+            # 4. Mover 'current' al que guardaste en el paso 1          (Anvazar el actual)
+            current = next_node
+        
+        self.head = prev # Al final, 'prev' queda apuntando al nuevo frente
 
     def to_list(self):
-        """
-        Auxiliar para verificar el resultado facilmente
-        """
-        res = []
-        actual = self.head
-        while actual:
-            res.append(actual.data)
-            actual = actual.next
-        return res
+        """Convierte la lista enlazada a una lista de Python para facilitar la lectura."""
+        elements = []
+        current = self.head
+        while current:
+            elements.append(current.data)
+            current = current.next
+        return elements
